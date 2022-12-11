@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup as BS
-
-URL = 'http://www.manascinema.com/'
+URL = 'https://cinematica.kg/'
+# URL = 'http://www.manascinema.com/'
 
 HEADERS = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
@@ -15,14 +15,14 @@ def get_html(url, params=''):
 
 def get_data(html):
     soup = BS(html, 'html.parser')
-    items = soup.find_all('div', class_='short_movie_info')
+    items = soup.find_all('div', class_='movie-dummy')
     manas_flm = []
     for item in items:
         manas_flm.append(
             {
-                'title': URL + item.find('a').get('href'),
-                'image': URL + item.find('div', class_='m_thumb').find('img').get('src'),
-                'description': URL + item.find('div', class_='m_data').get_text()
+                'title': URL + item.find('div', class_='movie-title').get('title'),
+                'image': URL + item.find('div', class_='movie-poster').find('img').get('src'),
+                # 'description': URL + item.find('div', class_='m_data').get_text()
             }
         )
     return manas_flm
@@ -33,7 +33,7 @@ def parser():
     if html.status_code == 200:
         manas_flm1 = []
         for page in range(0,1):
-            html = get_html(f'http://www.manascinema.com/movies', params=page)
+            html = get_html(f'https://cinematica.kg/movies', params=page)
             manas_flm1.extend(get_data(html.text))
         return manas_flm1
 
